@@ -1,11 +1,6 @@
-Node Http Server
+# A Basic Node HTTP Server
 
-A Javascript HTTP Server
+(CouchDB)[https://couchdb.apache.org/]
 
-Node is a wrapper for V8. V8 is used in Google's Chrome Browser.
-
-
-
-
-
-
+rpm run i
+node run_http.js

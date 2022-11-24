@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Node and CouchDB basic server example</title>
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="/assets/styles.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="main">
+    <h2>Hello World!</h2>
+
+    <div>
+      Demo for uploading files
+      <form action="/upload" enctype="multipart/form-data" method="post">
+        <input type="file" name="upload" multiple="multiple">
+        <input type="submit" value="Upload file" />
+      </form>
+    </div>
+  </div>
+</body>
+
+</html>

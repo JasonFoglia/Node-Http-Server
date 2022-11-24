@@ -1,22 +1,16 @@
-var fs = require("fs");
+const start_ssl = require("./server").start_ssl;
+const route = require("./router").route;
+const requestHandler = require("./requestHandler");
+const handle = {};
 
-var config = eval("(" + fs.readFileSync("http/config.json") + ")");
-GLOBAL.couch_connection = config.couch_connection;
-GLOBAL.upload_dir = config.upload_dir;
-GLOBAL.icopath = config.icopath;
-GLOBAL.certs = config.certs;
-GLOBAL.content_type = config.content_type;
+handle["/"] = requestHandler.start;
+handle["/upload"] = requestHandler.upload;
+handle["/show"] = requestHandler.show;
+handle["/favicon.ico"] = requestHandler.favicon;
 
-var server = require("./server"),
-route = require("./router"),
-handler = require("./requestHandler"),
-handle = {};
+start_ssl(route, handle);
 
-handle["/"] = handler.start;
-handle["/upload"] = handler.upload;
-handle["/show"] = handler.show;
-handle["/favicon.ico"] = handler.favicon;
-
-server.start(route.route, handle);
-server.start_ssl(route.route, handle);
-server.debug(route.route, handle);
+/**
+start(_route, handle);
+debug(_route, handle);
+ */

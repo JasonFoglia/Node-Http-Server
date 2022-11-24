@@ -1,0 +1,35 @@
+{
+  "rootdir": "./",
+  "couch_connection": {
+    "path": "localhost",
+    "port": "5984",
+    "user": "admin",
+    "pass": "admin"
+  },
+  "upload_dir": "./uploaded_files/",
+  "icopath": "./assets/",
+  "certs": {
+    "key": "certs/server.key",
+    "cert": "certs/server.cert"
+  },
+  "server": {
+    "port": 6000,
+    "adminPort": 8080,
+    "sslPort": 443
+  },
+  "content_type": {
+    "png": "image/png",
+    "jpeg": "image/jpeg",
+    "jpg": "image/jpeg",
+    "gif": "image/gif",
+    "ico": "image/x-icon",
+    "css": "text/css; charset=utf8",
+    "js": "text/javascript; charset=utf8",
+    "json": "application/json; charset=utf8",
+    "xml": "text/xml; charset=utf8",
+    "svg": "image/svg+xml",
+    "txt": "text/plain; charset=utf8",
+    "htc": "text/x-component",
+    "pdf": "application/pdf"
+  }
+}

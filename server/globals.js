@@ -1,4 +1,4 @@
-const config = require('./config.json');
+const config = require('../config.json');
 
 const globals = {
   couch_connection: config.couch_connection,

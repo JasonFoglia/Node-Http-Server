@@ -1,6 +1,6 @@
-const start_ssl = require("./server").start_ssl;
-const route = require("./router").route;
-const requestHandler = require("./requestHandler");
+const start_ssl = require("./server/server").start_ssl;
+const route = require("./server/route").route;
+const requestHandler = require("./server/requestHandler");
 const handle = {};
 
 handle["/"] = requestHandler.start;

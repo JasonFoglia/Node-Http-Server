@@ -7,7 +7,7 @@ const jason = {
   },
   log: (o) => {
     if (o != undefined && o != null) {
-      console.log(inspect(o, true, 4, true));
+      console.log(inspect(o, true, 2, true));
     }
   }
 }

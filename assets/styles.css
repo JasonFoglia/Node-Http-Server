@@ -12,3 +12,8 @@ body {
   width: 80vw;
   margin: auto;
 }
+
+.content {
+  margin: 15px 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

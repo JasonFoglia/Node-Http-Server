@@ -1,8 +1,6 @@
-const createReadStream = require("fs").createReadStream;
-const readFileSync = require("fs").readFileSync;
-const extname = require("path").extname;
-const resolve = require("path").resolve;
 const formidable = require("formidable");
+const { extname, resolve } = require("path");
+const { readFile, readFileSync, createReadStream } = require("fs");
 const mv = require('mv');
 
 const log = require("./utilities").log;
@@ -13,12 +11,14 @@ const requestHandler = {
   start: (response) => {
     log("Request handler 'start' was called.");
 
+    const body = "";
     const index = "./html/index.html";
     if (resolve(index)) {
       response.writeHead(200, {
         "Content-Type": "text/html"
       });
-      response.write(readFileSync(index), "binary");
+      const indexPage = readFileSync(index);
+      response.write(indexPage.toString().replace("{{body}}", body), "binary");
       response.end();
     }
 
@@ -37,43 +37,48 @@ const requestHandler = {
     formidable.UPLOAD_DIR = "./tmp";
     const form = new formidable.IncomingForm({ multiples: true });
 
+    response.writeHead(200, {
+      "Content-Type": "text/html"
+    });
     form.parse(request, (error, fields, files) => {
-      let res = "";
-      if (files && typeof files.upload == "object") {
+      if (files && !(files.upload instanceof Array)) {
         files.upload = [files.upload];
       }
+      let i = 0;
       files.upload.forEach((file) => {
         const oldpath = file.filepath;
         const fileName = file.originalFilename;
-        res += "received image:<br/><img src='/show?image=" + fileName + "' />";
         const newpath = GLOBAL.upload_dir + fileName;
+        const ext = extname(fileName).replace(".", "");
+
         mv(oldpath, newpath, (err) => {
           if (err) {
             log(["copy error", err]);
             throw err;
           }
-          const ext = extname(fileName).replace(".", "");
-          if (resolve(newpath)) {
+
+          Couch.Read(GLOBAL.couch_connection, "test", fileName, (d) => {
             const couchObj = {
               id: fileName,
               name: fileName,
               'Content-Type': GLOBAL.content_type[ext],
-              body: createReadStream(newpath)
+              body: createReadStream(newpath),
             };
+            if (d && d._rev) {
+              couchObj.rev = d._rev;
+            }
 
-            try {
-              Couch.WriteFile(GLOBAL.couch_connection, "test", couchObj);
-            } catch (e) { log(["Couch problem", e]) }
-          }
+            Couch.WriteFile(GLOBAL.couch_connection, "test", couchObj, (res) => {
+              response.write('<div>received image:</div><img src="/show?image=' + fileName + '" alt="' + fileName + '" />');
+              if (i == files.upload.length - 1) {
+                response.end();
+              }
+              i++;
+            });
+          });
+
         });
       });
-
-      response.writeHead(200, {
-        "Content-Type": "text/html"
-      });
-      response.write(res);
-      response.end();
-
     });
   },
 
@@ -82,6 +87,7 @@ const requestHandler = {
 
     Couch.ReadFile(GLOBAL.couch_connection, "test", query.image, query.image, undefined, (chunk) => {
       const ext = extname(query.image).replace(".", "");
+      log(query.image)
       response.writeHead(200, {
         "Content-Type": GLOBAL.content_type[ext]
       });
